@@ -1,0 +1,9 @@
+# Core (required): tiny SQLite vector extension loader
+sqlite-vec>=0.1.6
+
+# Default local embedder (optional but recommended): ONNX, no torch, no API.
+# Omit if you pass your own embedder or use HashingEmbedder.
+fastembed>=0.4.0
+
+# Dev only
+pytest>=8.0
