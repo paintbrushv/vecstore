@@ -1,0 +1,32 @@
+repo_name: vecstore
+repo_type: internal_tool
+domain: unreviewed
+status: active
+stage: prototype
+production: false
+revenue_candidate: false
+customer_facing: false
+risk: medium
+data_sensitivity: internal
+pii: false
+financial_outputs: false
+public_scraping: false
+production_deploys: false
+agents_enabled:
+- repo-hygiene
+cadence: monthly
+human_approval_required: true
+trust_default: internal
+local_only: false
+primary_metrics:
+- reliability
+links: {}
+memory_index:
+  allow_paths:
+  - README.md
+  - docs/**
+  deny_paths:
+  - .git/**
+  - .venv/**
+  - node_modules/**
+notes: Config inferred by factory_onboard.py on 2026-07-02; review before Tier A promotion.
