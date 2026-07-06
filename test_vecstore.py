@@ -121,3 +121,37 @@ def test_persistence_and_incremental_reopen():
     finally:
         if os.path.exists(path):
             os.unlink(path)
+
+
+# ---------------------------------------------------------------------------
+# T0.3 — search-time metadata filter (where=)
+# ---------------------------------------------------------------------------
+
+
+def _seeded():
+    """Three docs with full meta for where-filter tests; all match 'ups'."""
+    s = _store()
+    s.upsert("a#x-0", "ups lots and surplus alpha", meta={
+        "path": "a.md", "date": "2026-06-01", "source": "digests", "section": "x"})
+    s.upsert("b#x-0", "ups lots and surplus bravo", meta={
+        "path": "b.md", "date": "2026-07-01", "source": "digests", "section": "x"})
+    s.upsert("c#x-0", "ups lots and surplus charlie", meta={
+        "path": "docs/research/c.md", "date": "2026-07-02", "source": "research", "section": "x"})
+    return s
+
+
+def test_where_date_range():
+    hits = _seeded().search("ups", k=5, where={"date_from": "2026-06-15"})
+    assert {h["key"] for h in hits} == {"b#x-0", "c#x-0"}
+
+
+def test_where_source():
+    assert [h["key"] for h in _seeded().search("ups", k=5, where={"source": "research"})] == ["c#x-0"]
+
+
+def test_where_path_prefix():
+    assert [h["key"] for h in _seeded().search("ups", k=5, where={"path_prefix": "docs/research/"})] == ["c#x-0"]
+
+
+def test_where_no_match_returns_empty():
+    assert _seeded().search("ups", k=5, where={"source": "nope"}) == []
